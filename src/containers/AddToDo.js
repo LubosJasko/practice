@@ -1,33 +1,45 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../actions';
-
+import { addTodo, requestOptionPost, NOTES_API } from '../actions';
 
 const AddTodo = ({ dispatch }) => {
-    // let input;
-
-    const [input, setInput] = useState('Add todo')
+    const [input, setInput] = useState('')
+    const [inputPlaceholder, setInputPlaceholder] = useState('Add Todo')
 
     const handleInput = () => {
+        if (!input.trim()) {
+            return
+        }
+        dispatch(addTodo(input))
+        setInputPlaceholder('Last todo: ' + input)
         setInput('')
     }
 
+    const onPostTodo = () => {
+        addNewTodo();
+    }
+
+    const addNewTodo = () => (
+        fetch(NOTES_API.POST_NOTE, requestOptionPost({"title": input}))
+            .then (response => response.json())
+            .then (data => { 
+                dispatch(addTodo(data.title));
+                setInput('');
+            })
+        
+    )
+
     return (
         <div>
-            <form
-                onSubmit={
-                    e => {
-                        e.preventDefault();
-
-                        if (!input.value.trim()) {
-                            return
-                        }
-                        dispatch(addTodo(input.value));
-                        handleInput();
-                    }
-                }>
-                <input type='text' ref={el => (setInput(el))} />
-                <button type='submit'> Add Todo</button>
+            <form>
+                <input type='text'
+                    placeholder={inputPlaceholder}
+                    value={input}
+                    onChange={e => setInput(e.target.value)} />
+                <button type='button' style={{ margin: '4px' }}
+                    onClick={() => { handleInput() }}>Add Todo</button>
+                <button type='button' style={{ margin: '4px' }}
+                    onClick={() => { onPostTodo() }}>Post Add</button>
             </form>
         AddTodo
         </div>

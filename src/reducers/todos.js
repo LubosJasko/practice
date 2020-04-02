@@ -1,4 +1,4 @@
-import {ADD_TODO, TOGGLE_TODO, LOAD_TODOS,getNextTodoId} from '../actions';
+import {ADD_TODO, TOGGLE_TODO, LOAD_TODOS,getNextTodoId, DELETE_TODO} from '../actions';
 
 const todos = (state = [], action) => {
     switch(action.type) {
@@ -14,6 +14,8 @@ const todos = (state = [], action) => {
         case LOAD_TODOS:
             state.concat(action.todos)
             return state.concat(action.todos);
+        case DELETE_TODO: 
+            return state.filter(todo => todo.id !== action.id)
         case TOGGLE_TODO:
             return state.map(todo => 
                 todo.id === action.id ? { ...todo, completed: !todo.completed }

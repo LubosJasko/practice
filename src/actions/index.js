@@ -4,13 +4,21 @@ export const ADD_TODO = 'ADD_TODO';
 export const ADD_TODOS = 'ADD_TODOS';
 export const SET_VISIBLITY_FILTER = 'SET_VISIBLITY_FILTER';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
+export const DELETE_TODO = 'DELETE_TODO';
 
 export const LOAD_TODOS = 'GET_TODOS';
 export const REQUEST_POST = 'REQUEST_POST';
 
 export const NOTES_API = {
-    GET_ALL:  'http://private-9aad-note10.apiary-mock.com/notes'
+    GET_ALL:  'http://private-9aad-note10.apiary-mock.com/notes',
+    POST_NOTE: 'http://private-9aad-note10.apiary-mock.com/notes'
 }
+
+export const requestOptionPost = bodyJson => ({
+    method: 'POST',
+    headers: { 'Content-Type':'application/json'},
+    body: JSON.stringify(bodyJson)
+})
 
 export const VisibilityFilters = {
     SHOW_ALL: 'SHOW_ALL',
@@ -20,6 +28,11 @@ export const VisibilityFilters = {
 
 export const toggleTodo = id => ({
     type: TOGGLE_TODO,
+    id
+})
+
+export const deleteTodo = id => ({
+    type: DELETE_TODO,
     id
 })
 
