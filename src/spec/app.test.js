@@ -1,6 +1,7 @@
 import * as actions from '../actions';
 import reducer from '../reducers/todos';
 import fetch from 'cross-fetch';
+const fetchMock = require('fetch-mock');
 
 describe('Actions', () => {
     test('should crea an asction to add a todo', () => {
@@ -78,5 +79,30 @@ describe('Test fetch', () => {
                 "title": "Pick-up posters from post-office"
             }
         ])
+    })
+})
+
+describe('Test fetch POST', () => {
+    test('POST SUCCESS', async () => {
+        const resp = await fetch(
+            actions.NOTES_API.POST_NOTE, 
+            actions.requestOptionPost({title: 'Some text'})
+        )
+        .then (response => response.json());
+
+        expect(resp).toEqual({
+            'id': 3,
+            'title': "Buy cheese and bread for breakfast."
+        })
+    })
+
+    test('POST Handle error', async () => {
+        const resp = await fetch(
+            actions.NOTES_API.POST_NOTE, 
+            actions.requestOptionPost("error")
+        )
+        .then(response => response.json());
+
+        expect(resp).toThrow();
     })
 })
